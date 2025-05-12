@@ -1,0 +1,52 @@
+﻿@model AgriEnergy_ConnectApp.Models.Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="card shadow mt-4">
+    <div class="card-header bg-info text-white">
+        <h4>Product Details</h4>
+    </div>
+    <div class="card-body">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                <strong>Success:</strong> @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                <strong>Error:</strong> @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <!-- Display Product Details -->
+        <dl class="row">
+            <dt class="col-sm-4">Product Name</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.ProductName)</dd>
+
+            <dt class="col-sm-4">Product Type</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.ProductType)</dd>
+
+            <dt class="col-sm-4">Price</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Price)</dd>
+
+            <dt class="col-sm-4">Quantity</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Quantity)</dd>
+        </dl>
+
+        <!-- Form for POST operation -->
+        <form asp-action="DeleteProduct" asp-controller="Farmer" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="ProductId" value="@Model.ProductId" />
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-danger">Delete Product</button>
+                <a asp-action="FarmerDashboard" asp-controller="User" class="btn btn-secondary">Back</a>
+            </div>
+        </form>
+    </div>
+</div>

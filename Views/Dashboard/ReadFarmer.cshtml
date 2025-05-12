@@ -1,0 +1,58 @@
+﻿@model AgriEnergy_ConnectApp.Models.Farmer
+@{
+    ViewData["Title"] = "Display Farmer Details";
+}
+
+<div class="card shadow mt-4">
+    <div class="card-header bg-danger text-white">
+        <h4>Display Farmer Details</h4>
+    </div>
+    <div class="card-body">
+
+        <!-- Display Success Message -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                <strong>Success:</strong> @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <!-- Display Error Message -->
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                <strong>Error:</strong> @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <!-- Confirmation Message -->
+        <h5>Are you sure you want to delete this farmer?</h5>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.FullName)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.FullName)</dd>
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Email)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Phone)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Phone)</dd>
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Address)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Address)</dd>
+        </dl>
+
+        <!-- Confirm and Back Buttons -->
+        <form asp-action="Read" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="FarmerId" />
+
+            <div class="text-end">
+                <button type="submit" asp-controller="User" class="btn btn-danger">Show Farmer Details</button>
+                <a asp-action="EmployeeDashboard" asp-controller="User" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+

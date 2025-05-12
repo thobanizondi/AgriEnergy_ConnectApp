@@ -1,0 +1,94 @@
+﻿@model List<AgriEnergy_ConnectApp.Models.Product>
+
+@{
+    ViewData["Title"] = "Farmer Dashboard";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<style>
+    .red-text {
+        color: red;
+    }
+</style>
+
+<p>
+    Welcome, <span class="red-text">@ViewBag.FullName</span>!
+    You are logged in as a <span class="red-text">@ViewBag.UserType</span>.
+</p>
+
+
+
+<h3>Product Information Management</h3>
+
+<div class="mb-3">
+    <input type="text" id="dateFilter" class="form-control" placeholder="Filter by Date Added (e.g., 2023-01-01)..." onkeyup="filterByDate()" />
+</div>
+
+<a href="@Url.Action("AddProducts", "Farmer")" class="btn btn-primary">Add Product</a>
+<a href="@Url.Action("Index", "Home")" class="btn btn-secondary ml-2">Logout</a>
+
+<table class="table table-bordered mt-3" id="productsTable">
+    <thead class="table-dark">
+        <tr>
+            <th>Farmer ID</th>
+            <th>Product Name</th>
+            <th>Product Type</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Date Added</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.FarmerId</td>
+                    <td>@product.ProductName</td>
+                    <td>@product.ProductType</td>
+                    <td>@product.Price.ToString("C")</td>
+                    <td>@product.Quantity</td>
+                    <td class="date-added">@product.DateAdded.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a href="@Url.Action("EditProduct", "Product", new { id = product.ProductId })" class="btn btn-warning btn-sm">Edit</a>
+
+                       <a asp-controller="Product" asp-action="DeleteProduct" asp-route-id="@product.ProductId" class="btn btn-danger btn-sm">Delete</a>
+
+                        <a href="@Url.Action("ReadProducts", "Product", new { id = product.ProductId })" class="btn btn-info btn-sm">Read</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center">No products available.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function filterByDate() {
+        var input, filter, table, rows, dateCell, i, txtValue;
+        input = document.getElementById("dateFilter");
+        filter = input.value.toLowerCase();
+        table = document.getElementById("productsTable");
+        rows = table.getElementsByTagName("tr");
+
+        for (i = 1; i < rows.length; i++) {
+            dateCell = rows[i].getElementsByClassName("date-added")[0];
+            if (dateCell) {
+                txtValue = dateCell.textContent || dateCell.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

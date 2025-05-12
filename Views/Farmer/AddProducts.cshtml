@@ -1,0 +1,128 @@
+﻿@model AgriEnergy_ConnectApp.Models.Product
+
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<div class="card shadow mt-4">
+    <div class="card-header bg-primary text-white">
+        <h4>Create Product</h4>
+    </div>
+    <div class="card-body">
+        <!-- Success or Error Message -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <!-- Error Tracking Section -->
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <h5>Validation Errors:</h5>
+                <ul>
+                    @foreach (var item in ViewData.ModelState)
+                    {
+                        if (item.Value.Errors.Count > 0)
+                        {
+                            foreach (var error in item.Value.Errors)
+                            {
+                                <li><strong>@item.Key</strong>: @error.ErrorMessage</li>
+                            }
+                        }
+                    }
+                </ul>
+            </div>
+        }
+
+        <!-- Form -->
+        <form asp-controller="Product" asp-action="AddProducts" method="post">
+            @Html.AntiForgeryToken()
+
+            <!-- Farmer Dropdown -->
+            <div class="mb-3">
+                <label asp-for="FarmerId" class="form-label">Select Farmer</label>
+                <select asp-for="FarmerId" class="form-control" asp-items="ViewBag.FarmerList">
+                    <option value="">-- Select a farmer --</option>
+                </select>
+                <span asp-validation-for="FarmerId" class="text-danger"></span>
+            </div>
+
+            <!-- Product Name -->
+            <div class="mb-3">
+                <label asp-for="ProductName" class="form-label">Product Name</label>
+                <input asp-for="ProductName" class="form-control" placeholder="Enter product name" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+
+            <!-- Product Type -->
+            <div class="mb-3">
+                <label asp-for="ProductType" class="form-label">Product Type</label>
+                <input asp-for="ProductType" class="form-control" placeholder="Enter product type (e.g., Fruit, Vegetable)" />
+                <span asp-validation-for="ProductType" class="text-danger"></span>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-3">
+                <label asp-for="Price" class="form-label">Price</label>
+                <input asp-for="Price" class="form-control" type="number" step="0.01" min="0" placeholder="Enter product price" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <!-- Quantity -->
+            <div class="mb-3">
+                <label asp-for="Quantity" class="form-label">Quantity</label>
+                <input asp-for="Quantity" class="form-control" type="number" min="1" placeholder="Enter product quantity" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Create Product</button>
+                <a asp-controller="User" asp-action="FarmerDashboard" class="btn btn-secondary">Back</a>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <!-- JavaScript for Dynamic Error Focus -->
+    <script>
+        $(document).ready(function () {
+            if ($(".text-danger:visible").length > 0) {
+                $('html, body').animate({
+                    scrollTop: $(".text-danger:visible").first().offset().top - 100
+                }, 500);
+            }
+        });
+
+        <!-- JavaScript for Error Tracking -->
+        $(document).ready(function () {
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <text>console.log("Validation Errors:");</text>
+            @foreach (var item in ViewData.ModelState)
+            {
+                if (item.Value.Errors.Count > 0)
+                {
+                    foreach (var error in item.Value.Errors)
+                    {
+                        <text>console.log("Field: @item.Key, Error: @error.ErrorMessage");</text>
+                    }
+                }
+            }
+        }
+        });
+    </script>
+}

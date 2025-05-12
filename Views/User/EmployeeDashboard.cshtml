@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Employee Dashboard";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<style>
+    .red-text {
+        color: red;
+    }
+</style>
+
+<p>
+    Welcome, <span class="red-text">@ViewBag.FullName</span>!
+    You are logged in as a <span class="red-text">@ViewBag.UserType</span>.
+</p>
+
+
+
+<h3>Register a New Farmer</h3>
+
+<!-- Email Filter Input -->
+<input type="text" id="emailFilter" class="form-control mb-3" placeholder="Filter by Email..." onkeyup="filterByEmail()">
+
+<a href="@Url.Action("CreateFarmer", "Dashboard")" class="btn btn-primary">Add Farmer</a>
+<a href="@Url.Action("Index", "Home")" class="btn btn-secondary ml-2">Logout</a>
+
+<table class="table table-bordered mt-3" id="farmersTable">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var farmer in Model)
+        {
+            <tr>
+                <td>@farmer.FullName</td>
+                <td class="email">@farmer.Email</td>
+                <td>@farmer.Phone</td>
+                <td>@farmer.Address</td>
+                <td>
+                    <a href="@Url.Action("EditFarmer", "Dashboard", new { id = farmer.FarmerId })" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("DeleteFarmer", "Dashboard", new { id = farmer.FarmerId })" class="btn btn-danger">Delete</a>
+                    <a href="@Url.Action("ReadFarmer", "Dashboard", new { id = farmer.FarmerId })" class="btn btn-info">Read</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function filterByEmail() {
+        var input, filter, table, rows, emailCell, i, txtValue;
+        input = document.getElementById("emailFilter");
+        filter = input.value.toLowerCase();
+        table = document.getElementById("farmersTable");
+        rows = table.getElementsByTagName("tr");
+
+        for (i = 1; i < rows.length; i++) { // Start from 1 to skip header row
+            emailCell = rows[i].getElementsByClassName("email")[0];
+            if (emailCell) {
+                txtValue = emailCell.textContent || emailCell.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

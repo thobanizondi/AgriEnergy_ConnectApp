@@ -1,0 +1,56 @@
+﻿@model AgriEnergy_ConnectApp.Models.Product
+
+@{
+    ViewData["Title"] = "Delete Product";
+}
+
+<div class="card shadow mt-4">
+    <div class="card-header bg-danger text-white">
+        <h4>Delete Product</h4>
+    </div>
+    <div class="card-body">
+        <!-- Display Success Message -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                <strong>Success:</strong> @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <!-- Display Error Message -->
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                <strong>Error:</strong> @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <!-- Confirmation Message -->
+        <h5>Are you sure you want to delete the following product?</h5>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">Product Name:</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.ProductName)</dd>
+
+            <dt class="col-sm-4">Product Type:</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.ProductType)</dd>
+
+            <dt class="col-sm-4">Price:</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Price)</dd>
+
+            <dt class="col-sm-4">Quantity:</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Quantity)</dd>
+        </dl>
+
+        <!-- Confirm and Cancel Buttons -->
+        <form asp-action="ConfirmDeleteProduct" asp-controller="Farmer" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="ProductId" value="@Model.ProductId" />
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                <a asp-action="FarmerDashboard" asp-controller="User" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
